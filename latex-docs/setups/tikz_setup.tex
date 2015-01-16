@@ -1,0 +1,74 @@
+
+% Diagramas entidad relación
+% Ver ejemplo en http://heisenbugs.blogspot.com.es/2010/10/making-great-er-diagrams-without.html
+\usepackage{styles/tikz-er2}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shadows}
+
+%% ER styles
+\tikzstyle{every entity} = [top color=white, bottom color=blue!30,
+draw=blue!50!black!100, drop shadow]
+\tikzstyle{every weak entity} = [drop shadow={shadow xshift=.7ex,
+shadow yshift=-.7ex}]
+\tikzstyle{every attribute} = [top color=white, bottom color=yellow!20,
+draw=yellow, node distance=7em, drop shadow]
+\tikzstyle{every relationship} = [top color=white, bottom color=red!20,
+draw=red!50!black!100, drop shadow]
+\tikzstyle{every isa} = [top color=white, bottom color=green!20,
+draw=green!50!black!100, drop shadow]
+
+
+%% Árboles de directorios
+%\usepackage{tikz}
+%\usetikzlibrary{trees}
+
+%\tikzstyle{every node}=[draw=black,thick,anchor=west]
+%\tikzstyle{selected}=[draw=red,fill=red!30]
+%\tikzstyle{optional}=[dashed,fill=gray!50]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}{Modelo Jerárquico}
+%\begin{columns}
+%\begin{column}{0.5\textwidth}
+%\begin{center}
+
+%\begin{tikzpicture}[%
+%  grow via three points={one child at (0.5,-0.7) and
+%  two children at (0.5,-0.7) and (0.5,-1.4)},
+%  edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
+%  \node {País}
+%    child { node {Prov A}}		
+%    child { node [selected] {Prov C}
+%      child { node {Muni C1}}
+%      child { node [selected]{Muni C2}
+%      	child { node [selected] {Parc 1}}
+%      	child { node [selected] {Parc2}}
+%      	child { node [selected] {Parc n}}
+%      }
+%      child [missing] {}	
+%      child [missing] {}				
+%	  child [missing] {}	
+%      child { node [optional] {Muni C$n$}}
+%    }
+%    child [missing] {}				
+%    child [missing] {}	
+%    child [missing] {}				
+%    child [missing] {}	
+%    child [missing] {}							
+%    child [missing] {}				
+%    child { node [optional] {Prov $n$}};
+%\end{tikzpicture}
+%\end{center}
+%\end{column}
+%
+%\begin{column}{0.5\textwidth}
+%El modelo jerárquico organiza los datos en una estructura ramificada (\textit{tree structure}).\\[3ex]
+%
+%\textbf{Consulta:}\\
+%Cultivos/superficie en el municipio C2\\[3ex]
+%
+%\textbf{Coste:} \\
+%Una búsqueda por Prov, otra por Muni de la Prov C y calculamos las estadísticas para todos. No hay que seguir buscando.
+%\end{column}
+%\end{columns}
+%\end{frame}

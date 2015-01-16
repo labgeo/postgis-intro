@@ -1,0 +1,26 @@
+\ProvidesPackage{beamer_GeomaticaUA}[15/01/2015]
+
+%\DeclareOptionBeamer{compress}{\beamer@compresstrue}
+\ProcessOptionsBeamer
+
+\mode<presentation>
+
+\input{styles/beamer_GeomaticaUA_colortheme.sty}
+\input{styles/beamer_GeomaticaUA_fonttheme.sty}
+\input{styles/beamer_GeomaticaUA_innertheme.sty}
+\input{styles/beamer_GeomaticaUA_outertheme.sty}
+
+\setbeamertemplate{blocks}[rounded]
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{background canvas}{\includegraphics[height=\paperheight]{backgrounds/background.png}}
+
+\setbeamercovered{transparent}
+
+\AtBeginDocument{%
+  \typeout{..................................................................}
+  \typeout{Estás utilizando una plantilla de Beamer hecha por Benito Zaragozí para el Laboratorio de Geomática de la Universidad de Alicante}
+  \typeout{..................................................................}
+}
+
+\mode
+<all>

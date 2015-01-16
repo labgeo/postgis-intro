@@ -1,0 +1,12 @@
+\lstset{caption=Ejemplo de DELETE,label=sql:delete}
+\begin{SQL}
+----- Intentamos borrar un registro en la tabla Departamentos.
+--SELECT * FROM Departamentos WHERE dptoid = '09.24';
+--DELETE FROM Departamentos WHERE dptoid = '09.24';
+----- Comprobamos la existencia de registros relacionados en otras tablas.
+--SELECT * FROM Estancias WHERE coddpto = '09.24';
+----- Borramos los registros relacionados de otras tablas.
+-- DELETE FROM Estancias WHERE coddpto = '09.24';
+----- Finalmente podemos borrar los registros de la tabla principal.
+-- DELETE FROM Departamentos WHERE DptoId = '09.24';
+\end{SQL}

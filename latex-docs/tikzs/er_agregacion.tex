@@ -1,0 +1,9 @@
+%Requiere setup del package ER-tikz
+\begin{tikzpicture}[node distance=7em]
+\node[entity] (person) {Alumno};
+\node[relationship] (uses) [right of=person] {Uses} edge (person);
+\node[entity] (tool) [right of=uses] {PC} edge (uses);
+\node[relationship] (watches) [below of=uses] {Watches} edge (uses);
+\node[entity] (boss) [below of=watches] {Profesor} edge (watches);
+\node[rectangle, draw=gray, fit=(person) (uses) (tool), inner sep=1em] {};
+\end{tikzpicture}

@@ -1,0 +1,6 @@
+%Requiere setup del package ER-tikz
+\begin{tikzpicture}[node distance=8em]
+\node[entity] (person) {Persona};
+\node[relationship] (uses) [right of=person] {Uses} edge node[auto,swap] {0..*} (person);
+\node[entity] (tool) [right of=uses] {Estancia} edge node[auto,swap] {1..3} (uses);
+\end{tikzpicture}

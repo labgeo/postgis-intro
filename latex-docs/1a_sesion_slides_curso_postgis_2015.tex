@@ -1,0 +1,634 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SETUP
+\documentclass{classes/beamer_GeomaticaUA}
+%\documentclass[handout]{Classes/beamer_GeomaticaUA}
+\usepackage{styles/beamer_GeomaticaUA}
+%\usepackage{styles/Amsterdam}
+\input{setups/listings_setup}
+\input{setups/tikz_setup}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% METADATA
+\author{Benito Zaragozí}
+\title{Introducción al diseño de bases de datos espaciales}
+\titlegraphic{\includegraphics[height=0.6cm]{logos/logo_ua.png} \hspace{1cm} \includegraphics[height=1cm]{logos/iig}} 
+\institute[GeomaticaLab]{Instituto Interuniversitario de Geografía\\Laboratorio de Geomática} 
+\date{13 de noviembre de 2014}
+\subject{Primera sesión del curso ``Diseño, creación y gestión de Bases de Datos Geográficas con PostGIS''}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SLIDES
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\section[Introducción]{Presentación y comentarios sobre la estructura del curso}
+\subsection{Un poco de teoría y un montón de práctica}
+\begin{frame}{¿Que vamos a hacer hoy?}
+\begin{enumerate}
+\item Programa del curso
+\item ¿Qué es una geodatabase?
+\item Caso práctico
+\item Teoría y conceptos básicos
+\item Diseño de un modelo de datos
+\item Implementación en PostGIS
+\end{enumerate}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{¿Qué es una geodatabase?}
+\begin{block}{Definición de geodatabase}
+Una geodatabase es una base de datos con tipos especiales para los objetos geométricos. Permite almacenar datos geométricos y proporciona funciones especiales, índices espaciales y lenguajes de consulta (SQL). Una base de datos espacial es a menudo utilizado como un simple contenedor de almacenamiento para los datos espaciales, pero puede ser mucho más que eso.
+\end{block}
+
+\begin{exampleblock}{Geodatabases relacionales}
+\begin{itemize}
+\item \underline{Comerciales:} \href{http://en.wikipedia.org/wiki/Oracle\_Spatial}{Oracle Spatial}, SQL Server (2008), IBM DB2 Spatial, IBM Informix Spatial, MapInfo SpatialWare y \href{http://help.arcgis.com/es/arcgisserver/10.0/help/arcgis\_server\_dotnet\_help/index.html\#//009300000115000000}{ESRI ArcSDE}.
+\item \underline{Libres:} MySQL Spatial, \href{http://en.wikipedia.org/wiki/SpatiaLite}{SpatiaLite} y PostGIS.
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Otras geodatabases alternativas (NoSQL)}
+\begin{block}{Definición de NoSQL}
+Según \href{http://nosql-database.org/}{nosql-database.org}, es la nueva generación de bases de datos que se distinguen por las siguientes características:
+\begin{itemize}
+\item No-relacionales.
+\item Distribuidas.
+\item Open-source
+\item Horizontalmente escalables.
+\end{itemize}
+\end{block}
+
+\begin{block}{NoSQL con componente espacial}
+\begin{itemize}
+\item Perst, \href{http://paralleluniverse.co/product/}{SpaceBase} y ¿DB4O-spatial? 
+\item Neo4j y AllegroGraph.
+\item MongoDB y CouchDB.
+\item \href{http://cartodb.com/}{CartoDB} y StormDB.
+\end{itemize}
+\end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{SGBD espaciales vs SIG orientados a la aplicación}
+La relación entre SIG y Sistemas Gestores de Bases de Datos (SGBD) es cada vez más cercana y está tomando un interés creciente. Existen varios motivos que explican dicho interés:
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{exampleblock}{Ventajas}
+\begin{itemize}
+\item Reducción de la redundancia de datos
+\item Aumento de la integridad de datos
+\item Independencia de datos
+\item Seguridad de los datos
+\item Mantenimiento eficiente
+\item Visión Corporativa
+\end{itemize}
+\end{exampleblock}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\begin{alertblock}{Inconvenientes}
+\begin{itemize}
+\item Costes más elevados
+\item Personal adicional
+\item Aumento del tiempo de desarrollo
+\item Riesgo centralizado
+\item Anonimato de los datos
+\item Racionalidad excesiva
+\end{itemize}
+\end{alertblock}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\section[Conceptos]{Conceptos básicos en tecnologías de la información}
+\subsection{De los hechos a la sabiduría}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{El mundo real}
+
+\begin{block}{hecho, cha. (RAE)}
+(Del part. irreg. de hacer; lat. factus).
+...
+5. m. Cosa que sucede.
+6. m. Asunto o materia de que se trata.
+\end{block}
+
+\begin{exampleblock}{Ejemplo lab: hechos}
+``Actualmente, en el lab trabajan seis personas: Alfredo, José Manuel, José Tomás, Pepe, Miguel y Benito. Alfredo es el miembro del lab con mayor experiencia, tiene cincuenta ``tacos'', seguido de JM y JT, que ya no cumplen los cuarenta. A continuación, Miguel y Pepe tienen más de treinta y cinco, pero aún se les puede considerar jóvenes. Finalmente, por Benito parece que no pasa el tiempo, pero ya casi tiene la edad de Cristo al morir...''
+\end{exampleblock}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Datos}
+Un dato es un hecho registrado en cualquier formato y que puede ser útil para un usuario. Se trata de información no procesada.
+
+\begin{exampleblock}{Ejemplo lab: datos}
+lab, Alfredo, 46, José Manuel,José Tomás, Pepe, Miguel, Benito, 50, JM, 33, JT, 49, 39, 36
+\end{exampleblock}
+
+Si no aportamos estructura ni contexto, los datos son difícilmente utilizables.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Modelo Relacional}
+El modelo E-R (entidad-relación) representa el ``mundo real'' como un conjunto de entidades y relaciones entre estos objetos (entidad, conjunto de entidades, atributos y relaciones). Es el primer modelo basado en una teoría preexistente, propuesta por E. F. Codd en 1970. \\[3ex]
+
+Desde sus orígenes es el modelo más utilizado, pero su simplicidad ha provocado que se investiguen los modelos Orientados a Objetos y Objeto-relacional.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Teoría del Modelo Relacional (I)}
+El modelo relacional se estructura en tablas con las siguientes características básicas:
+\begin{itemize}
+\item Relación, tupla, atributos, grado, cardinalidad, clave primaria y dominio.
+\item Columnas únicas (nombre y dominio)
+\item Registros atómicos y únicos
+\item Columnas y filas \alert{no guardan orden alguno}
+\item Tabla (real) y vista (virtual)
+\item Integridad de entidades (claves primarias) e integridad referencial (claves externas)
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Teoría del Modelo Relacional (II)}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/relational_model.png} 
+\end{center}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Teoría del Modelo Relacional (III)}
+El modelo relacional proporciona un conjunto de operadores para manipular las tablas (\href{http://es.wikipedia.org/wiki/\%C3\%81lgebra_relacional}{álgebra relacional}). Esto se verá en detalle en la sesión de SQL (\textit{Structured Query Language}).
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Bases de datos}
+Una base de datos es una colección de datos interrelacionados. También son bases de datos:
+\begin{itemize}
+\item Una guía telefónica o una agenda
+\item La programación de TV
+\item Un sistema de reserva de billetes de autobús
+\item Los ficheros almacenados en el disco duro de un PC
+\end{itemize}
+
+\begin{exampleblock}{Ejemplo lab: base de datos}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline 
+\textbf{Nombre} & \textbf{Edad} & \textbf{Alias} \\ 
+\hline 
+Alfredo & 49 & • \\ 
+\hline 
+José Manuel & 47 & JM \\ 
+\hline 
+José Tomás & 43 & JT \\ 
+\hline 
+Miguel & 39 & • \\ 
+\hline 
+Pepe & 36 & • \\ 
+\hline 
+Benito & 33 & • \\ 
+\hline 
+\end{tabular} 
+\end{center}
+\end{exampleblock}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Sistema Gestor de Bases de Datos}
+Un SGBD o DBMS proporciona el \textbf{software} necesario para organizar los datos de un modo flexible. Incluye herramientas para añadir, modificar o eliminar datos, realizar preguntas sobre los datos almacenados y producir informes de un modo rápido.
+
+Para la elección del SGBD es muy recomendable tener en cuenta el Modelo de los Datos. Esto puede ahorrar mucho trabajo.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Información}
+Datos procesados, organizados y comunicados de un modo coherente. La información también puede ser vista como la respuesta a una pregunta.
+
+\begin{exampleblock}{Ejemplo lab: información}
+\begin{itemize}
+\item Todos los miembros del Lab son mayores de 32 años
+\item Ningún miembro del lab se jubilará en los próximos 5 años
+\item Sólo los miembros cuyo nombre es ``José'' tienen un alias, a Pepe no le hace falta...
+\item etc, etc
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Conocimiento}
+Información analizada, extraída y evaluada con un propósito. Este nivel de comprensión permite participar en procesos de toma de decisiones.
+
+\begin{exampleblock}{Ejemplo lab: conocimiento}
+En el caso de que no cambie nada, en menos de 20 años la plantilla del laboratorio estará muy envejecida. Esto puede tener consecuencias en el mantenimiento de los servicios. Hemos decidido
+\end{exampleblock}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Sabiduría}
+Una vez que los conocimientos obtenidos son aplicados, estos producen efectos (buenos, malos, etc). Este proceso produce nuevos datos e información, se trata de un conocimiento más útil para la solución de problemas.
+
+\vspace{1cm}
+
+\includegraphics[width=\textwidth]{images/proceso_KDD_mio.png} 
+
+\end{frame}
+
+\section[Caso práctico]{Investigación previa y pasos a seguir}
+\subsection{Gestión de espacios de una corporación}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Introducción}
+\begin{block}{Problema}
+La UA, con decenas de edificios y miles de empleados, quiere optimizar la gestión espacios. Los gerentes sospechan que el gasto en limpieza es desproporcionado en algunos departamentos. Además, entre otros diversos problemas, bromean sobre el rumor de que en los edificios próximos a la cafetería se hacen más horas extra. No obstante, no tienen un modo de analizar este tipo de situaciones. La información depende de distintos departamentos:
+\begin{itemize}
+\item Cartografía digital de los proyectos de cada edificio (Oficina técnica de proyectos).
+\item Un código para denominar a cada estancia (Gestión de espacios docentes).
+\item Un completo listado de personal (Gestión económica).
+\end{itemize}
+\end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Introducción II}
+Una geodatabase es un medio ideal para solucionar estos y otros posibles problemas. Analizar los datos de un modo sistemático dependerá de que superemos con éxito una serie de fases.
+
+\begin{block}{Objetivos específicos}
+\begin{enumerate}
+\item Definir un modelo de base de datos (ER, OO, Graph, etc).
+\item Escoger un SGBD apropiado (centenares de usuarios).
+\item Implementar la base de datos e incorporar toda la información disponible.
+\item Desarrollar métodos para responder a las preguntas específicas de los gestores y del público en general.
+\item Publicar los informes de un modo dinámico, para que los usuarios encuentren lo que necesitan con poco esfuerzo.
+\end{enumerate}
+\end{block}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{¿Por dónde empezamos?}
+\begin{enumerate}
+\item Conocer el problema de estudio (disciplina, conocimientos, experiencia, etc)
+\item Análisis de necesidades (\href{http://es.wikipedia.org/wiki/Martillo_de_oro}{Martillo de Maslow})
+\item Modelizar los datos (ER, UML, otros)
+\item Seleccionar un SGBD (PostgreSQL, Oracle, MySQL, etc)
+\item Implementar el modelo (\textit{Data Definition Language} -- SQL)
+\item Mantenimiento y gestión (acualizaciones, backups, desarrollos, etc)
+\end{enumerate}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Análisis de necesidades}
+El análisis de necesidades es específico de cada organización pero, como mínimo, debería responder unas preguntas básicas:
+
+\begin{itemize}
+\item ¿Cuantos registros almacenaremos y durante cuanto tiempo?
+\item ¿Quien utilizará la base de datos y para qué?
+\item ¿Los datos se modificarán? y, si es así, ¿con cuanta frecuencia?
+\item ¿Quien mantendrá la BD?
+\item ¿Qué hardware hay disponible?, ¿hay presupuesto para algo mejor?
+\item ¿Quien será el responsable de los datos?
+\item Los datos se consultarán on-line, ¿cuantas conexiones se realizarán?
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Diseño de bases de datos relacionales}
+Dos aproximaciones principales:
+\begin{enumerate}
+\item  Diseño de arriba abajo (top-down design)
+\begin{itemize}
+\item Desarrollo de un modelo conceptual (p. ej. ER, UML, etc)
+\item Reducción del modelo conceptual a relaciones
+\item Uso de la normalización como técnica de validación del modelo (si el modelo está bien hecho no hará falta más normalización)
+\end{itemize}
+
+\item Diseño de abajo arriba (bottom-up design)
+\begin{itemize}
+\item Diseño por descomposición
+\item Uso de normalización para crear las relaciones a partir de una tabla plana
+\end{itemize}
+\end{enumerate}
+\end{frame}
+
+\section[Modelo ER]{Modelo Entidad-Relación (ER)}
+\subsection{Diagramas Entidad-Relación}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{¿Qué es un modelo Entidad-Relación?}
+En un modelo ER el ``mundo real'' es descrito como una colección de entidades interrelacionadas. Estos modelos son representaciones con una notación ``conocida'', la cual permite una mejor comunicación entre los miembros del equipo que diseñan la base de datos. El modelo ER existe desde 1976 y fue propuesto por P. \textbf{Chen}. A pesar de su extendido uso, nunca ha sido estandarizado, por lo que conviene recordar que existen distintas notaciones ER:
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+\item \textbf{Chen}
+\item Crow's foot notation
+\item UML class diagrams
+\item Bachman notation
+\item Barker's Notation
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+\item IDEF1X[13]
+\item Martin notation
+\item Merise
+\item Object-Role Modeling
+\end{itemize}
+\end{column}
+\end{columns}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{¿Qué es un diagrama ER?}
+
+Un diagrama Entidad-Relación es una herramienta gráfica para modelizar datos. Un ER consiste en:
+\begin{itemize}
+\item Una colección de entidades definidas
+\item Una colección de relaciones entre dichas entidades
+\item Atributos asociados tanto a las entidades como a las relaciones 
+\end{itemize}
+
+En un diagrama ER las relaciones reciben un nombre. Otros aspectos de la relación suelen ir implícitos pero también pueden representarse si es necesario.
+
+\bigskip
+¡¡Ojo!! En la práctica nos referimos a entidades y relaciones, cuando en realidad se trata de definiciones de entidades y definiciones de relaciones. 
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Entidad con atributos}
+\begin{center}
+\resizebox{\textheight}{!}{%
+\input{tikzs/er_entidad_con_atributostex}
+}
+\end{center}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Relaciones uno-a-uno}
+
+\begin{center}
+\input{tikzs/er_uno_a_uno}
+\end{center}
+
+\begin{itemize}
+\item Cada persona está asociada como máximo a una estancia
+\item Cada estancia está asociada como máximo a una persona
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Relaciones uno-a-muchos}
+
+\begin{center}
+\input{tikzs/er_uno_a_muchos}
+\end{center}
+\begin{itemize}
+\item Cada persona está asociada cero o más estancias
+\item Cada estancia está asociada como máximo a una persona
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Relaciones muchos-a-muchos}
+
+\begin{center}
+\input{tikzs/er_muchos_a_muchos}
+\end{center}
+
+\begin{itemize}
+\item Cada persona está asociada cero o más estancias
+\item Cada estancia está asociada con cero o más personas
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Relación uno-a-muchos, con participación total}
+El nivel de participación es otro tipo de restricción en una relación. El nivel de participación puede ser:
+\begin{itemize}
+\item Parcial $\rightarrow$ Solamente algunas estancias están ocupadas por personas 
+\item Total $\rightarrow$ Todas las personas usan por lo menos una estancia
+\end{itemize}
+
+
+\begin{center}
+\input{tikzs/er_uno_a_muchos_participacion_total}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Relación muchos a muchos, con cardinalidad especificada}
+
+\begin{center}
+\input{tikzs/er_muchos_a_muchos_participacion_cardinalidad}
+\end{center}
+
+\begin{itemize}
+\item Cada persona está asociada a una estancia como mínimo y tres como máximo
+\item Cada estancia puede estar ocupada por entre cero y \textit{n} personas
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Relaciones con atributos}
+En algunos casos, una relación necesita tener atributos. En este caso el ``periodo'' es el tiempo que dura la relación y afecta tanto a las personas como a la ocupación de la estancia.
+
+\begin{center}
+\resizebox{!}{0.25\textwidth}{\input{tikzs/er_relacion_con_atributos}}
+\end{center}
+
+\begin{itemize}
+\item Cada persona está asociada cero o más estancias
+\item Cada estancia está asociada con cero o más personas
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Entidades débiles}
+Las entidades débiles existen únicamente mientras están asociadas a otras entidades. Se caracterizan por:
+\begin{itemize}
+\item No tienen clave primaria
+\item Contienten un conjunto de atributos que sirven para discriminarlas
+\item Necesitan ser consideradas en conjunción con las entidades fuertes
+\end{itemize}
+
+\begin{center}
+\resizebox{\textheight}{!}{\input{tikzs/er_entidades_debiles}}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Especialización/generalización}
+
+\begin{center}
+\resizebox{0.6\paperheight}{!}{\input{tikzs/er_especializacion_generalizacion}}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Agregación}
+
+\begin{center}
+\resizebox{0.8\textheight}{!}{\input{tikzs/er_agregacion}}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Modelo ER básico de la UA}
+
+
+\begin{center}
+\resizebox{!}{0.6\textwidth}{\input{tikzs/er_modelo_ua}}
+\end{center}
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Normalización}
+
+\end{frame}
+
+\section[Implementación]{Implementación del modelo}
+\subsection{Modelo relacional y SQL}
+%%SQL entre otros lenguajes
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\frametitle{Diagrama Entidad-Relación (físico)}
+\includegraphics[width=\textwidth]{images/ER.png}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\frametitle{PostgreSQL y PGAdmin3}
+\includegraphics[width=\textwidth]{images/pgadmin3_linux.png}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Creación de tablas}
+
+\begin{block}{CREATE TABLE}
+Crea una nueva tabla (vacía) en la base de datos actual y admite un buen número de parámetros (tablas temporales, herencia, valores por defecto, OIDs, restricciones, etc). El usuario que haya creado la tabla será el propietario.
+\end{block}
+
+\input{listings/crearTablaDepartamentos}
+
+\end{frame}
+
+
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Creación de tablas}
+\input{listings/crearTablaPersonas}
+\input{listings/crearTablaUsos}
+\end{frame}
+
+
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Creación de tablas... y tablas con geometrías}
+
+\input{listings/crearTablaPuestosDeTrabajo}
+
+
+\input{listings/importarEstancias}
+
+\end{frame}
+
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Definir claves externas}
+
+\begin{block}{Mantener la integridad referencial}
+Los cambios en una tabla pueden implicar modificaciones en otras tablas relacionadas. PostgreSQL controla esto automáticamente mediante el uso de claves ajenas.
+\end{block}
+
+\input{listings/anyadirClavesAjenas}
+
+\end{frame}
+
+
+
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Carga de datos}
+\begin{block}{INSERT}
+Inserta nuevas filas en una tabla. Se puede insertar una única fila especificada por expresiones de valor, o varias filas, como resultado de una consulta.
+\end{block}
+
+\input{listings/insertarPersona}
+
+Ahora puedes comprobar:
+\begin{enumerate}
+\item Lo que sucede al introducir un registro con una clave primaria repetida en la misma tabla.
+\item Lo que sucede al vulnerar las restricciones especificadas en la creación de las tablas (Ej: Valores nulos o únicos).
+\end{enumerate}
+
+\end{frame}
+
+
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Carga de datos masiva}
+
+\begin{block}{COPY}
+Utilizaremos este comando para importar y exportar datos entre PostgreSQL y los ficheros del sistema. Este método podrá resultar más práctico y ágil que realizar INSERT.
+\end{block}
+
+\input{listings/ejemploCopy}
+
+\begin{alertblock}{¿Importa el órden?}
+Si importas las estancias o los puestos de trabajo antes que las otras tablas te habrá aparecido un error de regla de integridad referencial. No se puede hacer referencia a algo que, por lo que concierne a nuestra base de datos actual, no existe.
+\end{alertblock}
+
+\end{frame}
+
+
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Eliminar datos de la DB}
+
+\begin{block}{DELETE}
+Este método elimina filas de una tabla que satisfagan la cláusula WHERE o si no hay WHERE, se eliminarán todas las filas de la tabla. El resultado es una tabla válida, pero vacía. Es interesante ver como afecta la existencia de claves ajenas:
+\end{block}
+
+
+
+\end{frame}
+
+
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Consultas a la BD}
+
+El SQL es un lenguaje estándar de consulta de bases de datos con un gran número de alternativas a la hora de explotar una base de datos. Existen muchos métodos y palabras clave para filtrar, ordenar y combinar los datos. Vamos a practicar un poco:
+
+\input{listings/ejemplosSelect}
+
+\end{frame}
+
+
+\end{document}

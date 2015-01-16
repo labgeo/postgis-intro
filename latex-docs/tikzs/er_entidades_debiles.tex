@@ -1,0 +1,8 @@
+%Requiere setup del package ER-tikz
+\begin{tikzpicture}[node distance=8em]
+\node[entity] (building) {Edificio};
+\node[ident relationship] (has) [right of=building] {Has} edge [->] (building);
+\node[weak entity] (room) [right of=has] {Estancia} edge [total] (has);
+\node[attribute] (roomnum) [above of=room, node distance=6em]
+{\discriminator{Código}} edge (room);
+\end{tikzpicture}

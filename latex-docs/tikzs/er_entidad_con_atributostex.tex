@@ -1,0 +1,11 @@
+%Requiere setup del package ER-tikz
+\begin{tikzpicture}[node distance=7em]
+\node[entity] (person) {Persona};
+\node[attribute] (pid) [left of=person] {\key{ID}} edge (person);
+\node[attribute] (name) [above left of=person] {Nombre} edge (person);
+\node[multi attribute] (phone) [above of=person] {Teléfono} edge (person);
+\node[attribute] (address) [above right of=person] {Dirección} edge (person);
+\node[attribute] (street) [above right of=address] {Calle} edge (address);
+\node[attribute] (city) [right of=address] {Ciudad} edge (address);
+\node[derived attribute] (age) [right of=person] {Edad} edge (person);
+\end{tikzpicture}

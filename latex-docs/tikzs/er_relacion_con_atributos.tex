@@ -1,0 +1,13 @@
+%Requiere setup del package ER-tikz
+\begin{tikzpicture}[node distance=8em]
+\node[entity] (person) {Persona};
+\node[attribute] (pid) [left of=person] {\key{ID}} edge (person);
+\node[attribute] (name) [above left of=person] {Nombre} edge (person);
+
+\node[relationship] (uses) [right of=person] {Uses} edge node[auto,swap] {N} (person);
+\node[attribute] (timelapse) [above of=uses, node distance=6em] {periodo} edge (uses);
+
+\node[entity] (room) [right of=uses] {Estancia} edge node[auto,swap] {M} (uses);
+\node[attribute] (pid) [right of=room] {\key{ID}} edge (room);
+\node[derived attribute] (area) [above right of=room] {Superficie} edge (room);
+\end{tikzpicture}

@@ -1,0 +1,12 @@
+%Requiere setup del package ER-tikz
+\begin{tikzpicture}[node distance=7em]
+\node[entity] (empleado) {Empleado};
+\node[isa] (isa1) [below of=empleado,node distance=5em] {ISA}
+edge node [auto,swap] {disjoint} (empleado);
+\node [entity] (pdi) [below left of=isa1] {PDI} edge (isa1);
+\node [entity] (pas) [below right of=isa1] {PAS} edge (isa1);
+\node[isa] (isa2) [below of=pdi,node distance=5em] {ISA}
+edge [total] (pdi);
+\node [entity] (docente) [below left of=isa2] {Docente} edge (isa2);
+\node [entity] (investigador) [below right of=isa2] {Investigador} edge (isa2);
+\end{tikzpicture}

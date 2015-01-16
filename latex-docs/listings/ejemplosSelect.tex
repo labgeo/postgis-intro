@@ -1,0 +1,14 @@
+\lstset{caption=Ejemplos de operadores,label=tab:selects}
+\begin{SQL}
+SELECT * FROM Personas;
+-- SELECT * FROM Personas WHERE Apellido1 = 'tu apellido';
+-- SELECT Nombre,Apellido1 FROM Personas WHERE extract(years from age(fechanac)) < 35;
+-- SELECT Nombre,Apellido1 FROM Personas WHERE extract(years from age(fechanac)) >= 50 AND extract(years from age(fechanac))<=70;
+-- SELECT Nombre,Apellido1 FROM Personas WHERE extract(years from age(fechanac)) BETWEEN 50 AND 70;
+-- SELECT NomDpto FROM Departamentos WHERE NomDpto LIKE '%GEO%';
+-- SELECT DISCTINCT Perfil FROM PuestoDeTrabajo WHERE Perfil LIKE '%Cate%';
+-- SELECT * FROM Personas ORDER BY Apellido1;
+-- SELECT Nombre,Apellido1 FROM Personas ORDER BY extract(years from age(fechanac)) asc LIMIT 5 OFFSET 1;
+
+-- Investigad los metodos UNION, INTERSECT y EXCEPT
+\end{SQL}

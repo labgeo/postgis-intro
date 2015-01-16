@@ -1,0 +1,155 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SETUP
+\documentclass{classes/beamer_GeomaticaUA}
+%\documentclass[handout]{Classes/beamer_GeomaticaUA}
+\usepackage{styles/beamer_GeomaticaUA}
+%\usepackage{styles/Amsterdam}
+\input{setups/listings_setup}
+\input{setups/tikz_setup}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% METADATA
+\author{José Torres Prieto}
+\title{Introducción Lenguaje de Consultas Estructurado (SQL)}
+\titlegraphic{\includegraphics[height=0.6cm]{logos/logo_ua.png} \hspace{1cm} \includegraphics[height=1cm]{logos/iig}} 
+\institute[GeomaticaLab]{Instituto Interuniversitario de Geografía\\Laboratorio de Geomática} 
+\date{13 de noviembre de 2014}
+\subject{Segunda sesión del curso ``Diseño, creación y gestión de Bases de Datos Geográficas con PostGIS''}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SLIDES
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\section[Introducción]{Presentación y comentarios}
+\subsection{Descripción general del SQL}
+\begin{frame}{¿Que vamos a hacer hoy?}
+\begin{enumerate}
+\item Breve repaso de la sesión anterior y aclaración de dudas
+\item ¿Qué es una geodatabase?
+\item Caso práctico
+\item Teoría y conceptos básicos
+\item Diseño de un modelo de datos
+\item Implementación en PostGIS
+\end{enumerate}
+\end{frame}
+
+
+\section[Consultas SQL]{Ejemplos de consultas complejas con SQL}
+\subsection{Modelo relacional y SQL}
+%%SQL entre otros lenguajes
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\frametitle{Diagrama Entidad-Relación (físico)}
+\includegraphics[width=\textwidth]{images/ER.png}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Creación de tablas}
+
+\begin{block}{CREATE TABLE}
+Crea una nueva tabla (vacía) en la base de datos actual y admite un buen número de parámetros (tablas temporales, herencia, valores por defecto, OIDs, restricciones, etc). El usuario que haya creado la tabla será el propietario.
+\end{block}
+
+\input{listings/crearTablaDepartamentos}
+
+\end{frame}
+
+
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Creación de tablas}
+\input{listings/crearTablaPersonas}
+\input{listings/crearTablaUsos}
+\end{frame}
+
+
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Creación de tablas... y tablas con geometrías}
+
+\input{listings/crearTablaPuestosDeTrabajo}
+
+
+\input{listings/importarEstancias}
+
+\end{frame}
+
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Definir claves externas}
+
+\begin{block}{Mantener la integridad referencial}
+Los cambios en una tabla pueden implicar modificaciones en otras tablas relacionadas. PostgreSQL controla esto automáticamente mediante el uso de claves ajenas.
+\end{block}
+
+\input{listings/anyadirClavesAjenas}
+
+\end{frame}
+
+
+\section[Ejercicios]{Creatividad con SQL}
+\subsection{Ejercicios con JOINS, consultas anidadas, etc}
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Carga de datos}
+\begin{block}{INSERT}
+Inserta nuevas filas en una tabla. Se puede insertar una única fila especificada por expresiones de valor, o varias filas, como resultado de una consulta.
+\end{block}
+
+\input{listings/insertarPersona}
+
+Ahora puedes comprobar:
+\begin{enumerate}
+\item Lo que sucede al introducir un registro con una clave primaria repetida en la misma tabla.
+\item Lo que sucede al vulnerar las restricciones especificadas en la creación de las tablas (Ej: Valores nulos o únicos).
+\end{enumerate}
+
+\end{frame}
+
+
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Carga de datos masiva}
+
+\begin{block}{COPY}
+Utilizaremos este comando para importar y exportar datos entre PostgreSQL y los ficheros del sistema. Este método podrá resultar más práctico y ágil que realizar INSERT.
+\end{block}
+
+\input{listings/ejemploCopy}
+
+\begin{alertblock}{¿Importa el órden?}
+Si importas las estancias o los puestos de trabajo antes que las otras tablas te habrá aparecido un error de regla de integridad referencial. No se puede hacer referencia a algo que, por lo que concierne a nuestra base de datos actual, no existe.
+\end{alertblock}
+
+\end{frame}
+
+
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Eliminar datos de la DB}
+
+\begin{block}{DELETE}
+Este método elimina filas de una tabla que satisfagan la cláusula WHERE o si no hay WHERE, se eliminarán todas las filas de la tabla. El resultado es una tabla válida, pero vacía. Es interesante ver como afecta la existencia de claves ajenas:
+\end{block}
+
+
+
+\end{frame}
+
+
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Consultas a la BD}
+
+El SQL es un lenguaje estándar de consulta de bases de datos con un gran número de alternativas a la hora de explotar una base de datos. Existen muchos métodos y palabras clave para filtrar, ordenar y combinar los datos. Vamos a practicar un poco:
+
+\input{listings/ejemplosSelect}
+
+\end{frame}
+
+
+\end{document}

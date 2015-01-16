@@ -1,0 +1,5 @@
+\lstset{caption=Importación de estancias}
+\begin{bash}
+## Utilizando shp2pgsql
+sudo shp2pgsql -s 25830 /home/benizar/Dropbox/Curso_FOSSGIS_Alcala/varios/siguaETRS89/siguaETRS89.shp  estancias public.uah  | psql -h localhost -d uah -U postgres
+\end{bash}

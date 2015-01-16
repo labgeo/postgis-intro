@@ -1,0 +1,35 @@
+%Requiere setup del package ER-tikz
+\begin{tikzpicture}[node distance=8em]
+\node[entity] (person) {Persona};
+\node[attribute] (dni) [below of=person] {\key{DNI}} edge (person);
+\node[attribute] (pname) [above left of=person] {Nombre} edge (person);
+\node[attribute] (psurnames) [above of=person] {Apellidos} edge (person);
+\node[derived attribute] (page) [below left of=person] {Edad} edge (person);
+\node[attribute] (contrato) [left of=person, node distance=10em] {Contrato} edge (person);
+\node[derived attribute] (extra) [above left of=contrato, node distance=6em] {Horas extra} edge (contrato);
+\node[derived attribute] (holidays) [below left of=contrato, node distance=6em] {Vacaciones} edge (contrato);
+
+
+\node[relationship] (works) [right of=person] {Trabaja} edge node[auto,swap] {N} (person);
+\node[attribute] (timelapse) [above of=works, node distance=6em] {periodo} edge (works);
+
+
+
+\node[entity] (room) [right of=works] {Estancia} edge node[auto,swap] {M} (works);
+\node[attribute] (rid) [right of=room] {\key{Código}} edge (room);
+\node[attribute] (use) [below right of=room] {Uso} edge (room);
+\node[attribute] (rgeom) [above right of=room] {Geometry} edge (room);
+\node[derived attribute] (rarea) [above right of=rgeom] {Superficie} edge (rgeom);
+\node[derived attribute] (rdens) [above left of=rgeom] {Densidad} edge (rgeom);
+
+
+\node[ident relationship] (has) [below of=works, node distance=12em] {Has} edge [->] (works);
+
+\node[weak entity] (department) [below of=has, node distance=6em] {Departamento} edge [total] (has);
+\node[attribute] (did) [right of=department] {\discriminator{ID}} edge (department);
+\node[attribute] (dname) [left of=department] {Nombre} edge (department);
+
+
+\node[rectangle, draw=gray, fit=(dni) (rarea) (extra), inner sep=1em] {};
+
+\end{tikzpicture}
