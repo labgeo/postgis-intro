@@ -2,8 +2,10 @@
 \begin{bash}
 ## Trabajamos en nuestro directorio /home
 cd
-## Descargamos fichero shape de SIGUA
-
+## Descargamos archivo comrpimido con fichero shape de SIGUA
+wget https://github.com/labgeo/postgis-intro/raw/2015edition/data/shapefiles/siguapb/siguapb.tar.lz
+## Extraemos fichero shape en subdirectorio siguapb
+mkdir siguapb; tar --lzip -xvf siguapb.tar.lz -C siguapb
 ## Importamos a PostgreSQL con la utilidad shp2pgsql
-sudo shp2pgsql -s 25830 /home/benizar/Dropbox/Curso_FOSSGIS_Alcala/varios/siguaETRS89/siguaETRS89.shp  estancias public.uah  | psql -h localhost -d uah -U postgres
+sudo shp2pgsql -s 25830 siguapb/siguapb.shp  estancias public.uah  | psql -h localhost -d postgis-intro -U postgres
 \end{bash}
