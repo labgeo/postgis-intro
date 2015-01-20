@@ -7,7 +7,7 @@ ALTER TABLE estancias
 ADD FOREIGN KEY (coduso) REFERENCES usos(coduso);
 
 ALTER TABLE puestodetrabajo 
-ADD FOREIGN KEY (EstanId) REFERENCES estancias(codigo);
+ADD FOREIGN KEY (estanid) REFERENCES estancias(codigo);
 
 ALTER TABLE puestodetrabajo 
 ADD FOREIGN KEY (persid) REFERENCES personas(persid);
