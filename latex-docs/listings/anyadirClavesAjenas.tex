@@ -1,14 +1,14 @@
 \lstset{caption=Añadir claves ajenas,label=sql:crearForeignKey}
 \begin{SQL}
-ALTER TABLE Estancias 
-ADD FOREIGN KEY (coddpto) REFERENCES Departamentos(dptoid);
+ALTER TABLE estancias 
+ADD FOREIGN KEY (coddpto) REFERENCES departamentos(dptoid);
 
-ALTER TABLE Estancias 
-ADD FOREIGN KEY (coduso) REFERENCES Usos(coduso);
+ALTER TABLE estancias 
+ADD FOREIGN KEY (coduso) REFERENCES usos(coduso);
 
-ALTER TABLE PuestoDeTrabajo 
-ADD FOREIGN KEY (EstanId) REFERENCES Estancias(codigo);
+ALTER TABLE puestodetrabajo 
+ADD FOREIGN KEY (EstanId) REFERENCES estancias(codigo);
 
-ALTER TABLE PuestoDeTrabajo 
-ADD FOREIGN KEY (PersId) REFERENCES Personas(PersId);
+ALTER TABLE puestodetrabajo 
+ADD FOREIGN KEY (persid) REFERENCES personas(persid);
 \end{SQL}
