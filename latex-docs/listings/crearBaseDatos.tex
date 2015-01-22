@@ -1,0 +1,13 @@
+\lstset{caption=Creación de la base de datos geográfica}
+\begin{bash}
+## Nos conectamos al servidor PostgreSQL
+psql -U user -h localhost
+## Creamos una nueva base de datos
+CREATE DATABASE ua WITH ENCODING = 'UTF8';
+## Nos conectamos a la nueva base de datos
+\connect ua
+## Instalamos la extensión PostGIS en la nueva base de datos
+CREATE EXTENSION postgis;
+## Cerramos la sesión psql
+\q
+\end{bash}

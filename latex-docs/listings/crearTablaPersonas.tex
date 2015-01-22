@@ -1,12 +1,12 @@
 %SET DATESTYLE TO 'ISO';
 \lstset{caption=Crear tabla ``personas'',label=sql:crearTablaPersonas}
 \begin{SQL}
-CREATE TABLE Personas (
-PersId VARCHAR (20) PRIMARY KEY,
-Apellido1 VARCHAR(30) NOT NULL,
-Apellido2 VARCHAR(30),
-Nombre VARCHAR(30) NOT NULL,
-Ciudad VARCHAR (20) NOT NULL,
-FechaNac DATE NOT NULL,
-HorasExtra SMALLINT DEFAULT 0 NOT NULL);
+CREATE TABLE personas (
+persid VARCHAR (20) PRIMARY KEY,
+apellido1 VARCHAR(30) NOT NULL,
+apellido2 VARCHAR(30),
+nombre VARCHAR(30) NOT NULL,
+municipioid VARCHAR (20) NOT NULL,
+fechanac DATE NOT NULL,
+horasextra SMALLINT DEFAULT 0 NOT NULL);
 \end{SQL}
