@@ -2,13 +2,17 @@
 \begin{SQL}
 ALTER TABLE estancias 
 ADD FOREIGN KEY (coddpto) REFERENCES departamentos(dptoid);
-
 ALTER TABLE estancias 
 ADD FOREIGN KEY (coduso) REFERENCES usos(coduso);
-
-ALTER TABLE puestodetrabajo 
-ADD FOREIGN KEY (estanid) REFERENCES estancias(codigo);
-
-ALTER TABLE puestodetrabajo 
+ALTER TABLE puestosdetrabajo 
 ADD FOREIGN KEY (persid) REFERENCES personas(persid);
+ALTER TABLE municipios
+   ALTER COLUMN jurisdicci SET NOT NULL;
+ALTER TABLE municipios
+  ADD UNIQUE (jurisdicci);
+ALTER TABLE personas 
+ADD FOREIGN KEY (municipioid) REFERENCES municipios(jurisdicci);
+
+--¿Qué ocurre si intentamos que el campo estancias.codigo opere
+--clave ajena del campo puestosdetrabajo.estanid?
 \end{SQL}
