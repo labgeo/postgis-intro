@@ -51,7 +51,9 @@ language=SQL,                % choose the language of the code
  return,returns,cost,row,volatile,into, setof, double, precision,declare,record,reverse,boolean},
  numbers=left,
  numbersep=14pt,
- breaklines=true
+ breaklines=true,
+ extendedchars=true,
+ literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1 {¿}{{?`}}1
 }}{}
 
 
@@ -73,9 +75,12 @@ language=bash,                % choose the language of the code
  basicstyle=\tiny\ttfamily,
  commentstyle=\color[rgb]{0.133,0.545,0.133},
  keywordstyle=\color[rgb]{0,0,1},%\bfseries
+ morekeywords={cd,mkdir}
  numbers=left,
  numbersep=14pt,
- breaklines=true
+ breaklines=true,
+ extendedchars=true,
+ literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1 {¿}{{?`}}1
 }}{}
 
 
