@@ -522,6 +522,56 @@ Las entidades débiles existen únicamente mientras están asociadas a otras ent
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Creación de una base de datos PostGIS}
+
+\begin{block}{CREATE DATABASE y CREATE EXTENSION}
+Desde el terminal invocamos \textbf{psql}, la consola interactiva de PostgreSQL, y nos conectamos con un usuario con privilegios para crear una base de datos. Una vez creada (\textit{CREATE DATABASE}), instalamos sobre ella la extensión \textbf{postgis} (\textit{CREATE EXTENSION}). 
+\end{block}
+
+\input{listings/crearBaseDatos}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Importación de estancias}
+
+\begin{block}{shp2pgsql}
+\setbeamerfont{footnote}{size=\tiny}
+La utilidad \textbf{shp2pgsql} permite volcar \textit{shapefiles} en PostgreSQL como entidades PostGIS. Usaremos un \textit{snapshot} de las plantas bajas de los edificios del Campus de San Vicente\footnote[frame]{Fuente: \href{http://www.sigua.ua.es}{SIGUA}(Sistema de Información Geográfica de la UA)}.
+\end{block}
+
+\input{listings/importarEstancias}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Importación de municipios}
+
+\begin{block}{GDAL}
+\setbeamerfont{footnote}{size=\tiny}
+\href{http://www.gdal.org/}{GDAL/OGR} es una librería de traducción entre formatos de datos geográficos. La utilidad \textbf{ogr2ogr} permite operar con formatos vectoriales. La usaremos para volcar en PostgreSQL un fichero GML con los municipios de Alicante y provincias limítrofes\footnote[frame]{Fuente: \href{http://centrodedescargas.cnig.es/CentroDescargas/}{CNIG EGRN} (Instituto Geográfico Nacional)}.
+\end{block}
+
+\input{listings/importarMunicipios}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Datos alfanuméricos}
+
+\begin{block}{Texto CSV}
+Vamos a necesitar datos sobre lo departamentos que utilizan las estancias, el uso que se hace de ellas, las personas que las ocupan y los trabajos que desempeñan. Primero descargaremos esos datos, que se proporcionan como ficheros de texto estructurado en formato CSV.
+\end{block}
+
+\input{listings/descargarFicherosCSV}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame{\frametitle{PostgreSQL y PGAdmin3}
 \includegraphics[width=\textwidth]{images/pgadmin3_linux.png}
 }
@@ -535,27 +585,14 @@ Crea una nueva tabla (vacía) en la base de datos actual y admite un buen númer
 \end{block}
 
 \input{listings/crearTablaDepartamentos}
-
+\input{listings/crearTablaUsos}
 \end{frame}
-
 
 % --------------------------------------------------- Slide --
 \begin{frame}[fragile]
 \frametitle{Creación de tablas}
 \input{listings/crearTablaPersonas}
-\input{listings/crearTablaUsos}
-\end{frame}
-
-
-% --------------------------------------------------- Slide --
-\begin{frame}[fragile]
-\frametitle{Creación de tablas... y tablas con geometrías}
-
 \input{listings/crearTablaPuestosDeTrabajo}
-
-
-\input{listings/importarEstancias}
-
 \end{frame}
 
 % --------------------------------------------------- Slide --

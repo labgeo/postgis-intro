@@ -1,8 +1,5 @@
 \lstset{caption=Ejemplo de COPY,label=sql:copy}
 \begin{SQL}
--- Para importar datos en ficheros CSV usamos el comando COPY.
--- El comando COPY no es propio del estándar SQL, es específico de PostgreSQL.
 COPY departamentos FROM '/home/user/Departamentos.csv' WITH DELIMITER ';' csv header;
--- Ahora importa el resto de ficheros a la base de datos: Usos.csv, Personas.csv y
--- PuestosDeTrabajo.csv
+-- Ahora importa el resto de ficheros a la base de datos.
 \end{SQL}
