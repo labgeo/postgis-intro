@@ -1,0 +1,5 @@
+\lstset{caption=Ejemplo de índice GiST,label=sql:gist}
+\begin{SQL}
+-- La sintaxis para crear un índice GiST en la columna geometría:
+CREATE INDEX index_ua_pc2 ON ua_pc2 USING GIST (geom);
+\end{SQL}

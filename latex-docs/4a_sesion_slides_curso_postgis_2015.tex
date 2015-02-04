@@ -1,0 +1,130 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SETUP
+\documentclass{classes/beamer_GeomaticaUA}
+%\documentclass[handout]{Classes/beamer_GeomaticaUA}
+\usepackage{styles/beamer_GeomaticaUA}
+%\usepackage{styles/Amsterdam}
+\input{setups/listings_setup}
+\input{setups/tikz_setup}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% METADATA
+\author{Miguel Fernández Moreno}
+\title{PostGIS (II)}
+\titlegraphic{\includegraphics[height=0.6cm]{logos/logo_ua.png} \hspace{1cm} \includegraphics[height=1cm]{logos/iig}} 
+\institute[GeomaticaLab]{Instituto Interuniversitario de Geografía\\Laboratorio de Geomática} 
+\date{13 de noviembre de 2014}
+\subject{Cuarta sesión del curso ``Diseño, creación y gestión de Bases de Datos Geográficas con PostGIS''}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SLIDES
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\section[Introducción]{Presentación y comentarios}
+\subsection{Descripción general del SQL}
+\begin{frame}{¿Que vamos a hacer hoy?}
+\begin{enumerate}
+\item Índices espaciales
+\item Topología
+\item Geoprocesamiento
+\end{enumerate}
+\end{frame}
+
+
+\section[Índices]{Índices espaciales}
+%%SQL entre otros lenguajes
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{El índice en una base de datos}
+Estructura de datos que mejora la velocidad de las operaciones, por medio de un identificador único de cada fila de una tabla, permitiendo un rápido acceso a los registros de una tabla en una base de datos. 
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{¿Por qué usarlos?}
+\begin{itemize}
+\item Evitamos un lectura completa de la tabla
+\item Rápidez en la ejecución de las consultas
+\item Evitamos sobrecarga de CPU, sobrecarga de disco y concurrencia
+\item Es una ventaja en tablas con gran cantidad de datos
+\end{itemize}
+\end{frame}
+
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Índices PostgreSQL / Postgis}
+\begin{description}
+\item[B-Trees]\hfill \\ Se usa para datos que pueden ser ordenados sobre un eje: números, letras, fechas. No es aplicable a los datos GIS.
+\item[R-Trees] \hfill \\Divide los datos en rectángulos, sub-rectángulos, sub-sub-rectángulos, etc.
+\item[GiST] \hfill \\Parte los datos \emph{cosas que están a un lado}, \emph{cosas que se superponen}, \emph{cosas que están dentro}. PostGIS utiliza un índice R-Tree implementado en la parte superior de GiST para indexar los datos GIS.
+\end{description}
+\end{frame}
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Crear índice usando GiST}
+\input{listings/ejemploIndex}
+\end{frame}
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{GiST}
+\input{listings/queryWithIndex}
+\end{frame}
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Funcionamiento de la consulta con el índice}
+\begin{block}{Resultado sin índice}
+\center\includegraphics[scale=0.5]{images/resultWithoutIndex.png}
+\end{block}
+\begin{block}{Resultado con índice}
+\center\includegraphics[scale=0.5]{images/resultWithIndex.png}
+\end{block}
+\end{frame}
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Funcionamiento de la consulta con el índice}
+\center\includegraphics[scale=0.5]{images/resultWithIndex.png}
+\end{frame}
+% --------------------------------------------------- Slide --
+\section[Operadores]{Operadores espaciales}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Operadores espaciales (I)}
+\begin{description}
+\item[\&\&]Devuelve TRUE si la bounding box de la geometría A intersecta con la bounding box de la geometría B.
+\item[\&$<$]Devuelve TRUE if A's bounding box overlaps or is to the left of B's.
+\item[\&$<|$]Devuelve TRUE if A's bounding box overlaps or is below B's.
+\item[\&$>$]Devuelve TRUE if A' bounding box overlaps or is to the right of B's.
+\item[$<<$]Devuelve TRUE if A's bounding box is strictly to the left of B's.
+\item[$<<|$]Devuelve TRUE if A's bounding box is strictly below B's.
+\end{description}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Operadores espaciales (II)}
+\begin{description}
+\item[=]Devuelve TRUE if A's bounding box is the same as B's. Uses double precision bounding box.
+\item[$>>$]Devuelve TRUE if A's bounding box is strictly to the right of B's.
+\item[$@$]Devuelve TRUE if A's bounding box is contained by B's.
+\item[$\mid$\&$>$]Devuelve TRUE if A's bounding box overlaps or is above B's.
+\item[$\mid\gg$]Devuelve TRUE if A's bounding box is strictly above B's.
+\item[$\thicksim$]Devuelve TRUE if A's bounding box contains B's.
+\end{description}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Operadores espaciales (III)}
+\begin{description}
+\item[$~=$]Devuelve TRUE if A's bounding box is the same as B's.
+\item[$<->$]Devuelve la distancia entre dos puntos. For point / point checks it uses floating point accuracy (as opposed to the double precision accuracy of the underlying point geometry). For other geometry types the distance between the floating point bounding box centroids is returned. Useful for doing distance ordering and nearest neighbor limits using KNN gist functionality.
+\item[$<\#>$]Devuelve la distancia entre la bounding box de dos geometrías. For point / point checks it's almost the same as distance (though may be different since the bounding box is at floating point accuracy and geometries are double precision). Useful for doing distance ordering and nearest neighbor limits using KNN gist functionality.
+\end{description}
+\end{frame}
+\section[Ejercicios]{Operadores espaciales}
+% --------------------------------------------------- Slide --
+
+% --------------------------------------------------- Slide --
+
+
+\end{document}

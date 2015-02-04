@@ -1,0 +1,7 @@
+\lstset{caption=Comprobar velocidad del índice GiST,label=sql:qIndex}
+\begin{SQL}
+-- Sintaxis para comprobar el funcionamiento del índice:
+SELECT codigo ,avg(z) AS media FROM estancias, ua_pc2
+WHERE st_intersects(estancias.geom, ua_pc2.geom) 
+GROUP BY codigo;
+\end{SQL}
