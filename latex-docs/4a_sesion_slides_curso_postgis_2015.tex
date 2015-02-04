@@ -24,18 +24,17 @@
 
 \section[Introducción]{Presentación y comentarios}
 \subsection{Descripción general del SQL}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{¿Que vamos a hacer hoy?}
 \begin{enumerate}
 \item Índices espaciales
-\item Topología
+\item Operadores espaciales
 \item Geoprocesamiento
 \end{enumerate}
 \end{frame}
 
 
 \section[Índices]{Índices espaciales}
-%%SQL entre otros lenguajes
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{El índice en una base de datos}
@@ -93,38 +92,100 @@ Estructura de datos que mejora la velocidad de las operaciones, por medio de un 
 \frametitle{Operadores espaciales (I)}
 \begin{description}
 \item[\&\&]Devuelve TRUE si la bounding box de la geometría A intersecta con la bounding box de la geometría B.
-\item[\&$<$]Devuelve TRUE if A's bounding box overlaps or is to the left of B's.
-\item[\&$<|$]Devuelve TRUE if A's bounding box overlaps or is below B's.
-\item[\&$>$]Devuelve TRUE if A' bounding box overlaps or is to the right of B's.
-\item[$<<$]Devuelve TRUE if A's bounding box is strictly to the left of B's.
-\item[$<<|$]Devuelve TRUE if A's bounding box is strictly below B's.
+\item[\&$<$]Devuelve TRUE si la bounding box de A solapa o está a la izquierda de B.
+\item[\&$<|$]Devuelve TRUE si la bounding box de A solapa o está bajo de B.
+\item[\&$>$]Devuelve TRUE si la bounding box de A solapa o está a la derecha de B.
+\item[$<<$]Devuelve TRUE si la bounding box de A está estrictamente a la izquierda de B.
+\item[$<<|$]Devuelve TRUE si la bounding box de A está estrictamente bajo de B.
 \end{description}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --------------------------------------------------- Slide --
 \begin{frame}[fragile]
 \frametitle{Operadores espaciales (II)}
 \begin{description}
-\item[=]Devuelve TRUE if A's bounding box is the same as B's. Uses double precision bounding box.
-\item[$>>$]Devuelve TRUE if A's bounding box is strictly to the right of B's.
-\item[$@$]Devuelve TRUE if A's bounding box is contained by B's.
-\item[$\mid$\&$>$]Devuelve TRUE if A's bounding box overlaps or is above B's.
-\item[$\mid\gg$]Devuelve TRUE if A's bounding box is strictly above B's.
-\item[$\thicksim$]Devuelve TRUE if A's bounding box contains B's.
+\item[=]Devuelve TRUE si la bounding box de A es la misma que la de B. Usa doble precisión.
+\item[$>>$]Devuelve TRUE si la bounding box de A es estrictamente a la derecha de B.
+\item[$@$]Devuelve TRUE si la bounding box de A está contenida por la de B.
+\item[$\mid$\&$>$]Devuelve TRUE si la bounding box de A solapa o está arriba de la de B.
+\item[$\mid\gg$]Devuelve TRUE si la bounding box de A está estrictamente arriba de la de B.
+\item[$\thicksim$]Devuelve TRUE si la bounding box de A contiene la de B.
 \end{description}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --------------------------------------------------- Slide --
 \begin{frame}[fragile]
 \frametitle{Operadores espaciales (III)}
 \begin{description}
-\item[$~=$]Devuelve TRUE if A's bounding box is the same as B's.
-\item[$<->$]Devuelve la distancia entre dos puntos. For point / point checks it uses floating point accuracy (as opposed to the double precision accuracy of the underlying point geometry). For other geometry types the distance between the floating point bounding box centroids is returned. Useful for doing distance ordering and nearest neighbor limits using KNN gist functionality.
-\item[$<\#>$]Devuelve la distancia entre la bounding box de dos geometrías. For point / point checks it's almost the same as distance (though may be different since the bounding box is at floating point accuracy and geometries are double precision). Useful for doing distance ordering and nearest neighbor limits using KNN gist functionality.
+\item[$~=$]Devuelve TRUE si la bounding box de A es la misma que la de B.
+\item[$<->$]Devuelve la distancia entre dos puntos. F
+\item[$<\#>$]Devuelve la distancia entre la bounding box de dos geometrías. 
 \end{description}
 \end{frame}
+
 \section[Ejercicios]{Operadores espaciales}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % --------------------------------------------------- Slide --
 
 % --------------------------------------------------- Slide --
 
+\section[Geoprocesamiento]{Geoprocesamiento}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Geoprocesamiento (I)}
+\begin{description}
+\item[st\_buffer] (T) For geometry: Returns a geometry that represents all points whose distance from this Geometry is less than or equal to distance. Calculations are in the Spatial Reference System of this Geometry. For geography: Uses a planar transform wrapper.
+\item[st\_buildArea] — Creates an areal geometry formed by the constituent linework of given geometry
+\item[st\_collect] — Return a specified ST\_Geometry value from a collection of other geometries.
+\item[st\_concaveHull] — The concave hull of a geometry represents a possibly concave geometry that encloses all geometries within the set. You can think of it as shrink wrapping.
+\end{description}
+\end{frame}
+% --------------------------------------------------- Slide --
 
+\begin{frame}[fragile]
+\frametitle{Geoprocesamiento (II)}
+\begin{description}
+\item[st\_convexHull] — The convex hull of a geometry represents the minimum convex geometry that encloses all geometries within the set.
+\item[st\_curveToLine] — Converts a CIRCULARSTRING/CURVEDPOLYGON to a LINESTRING/POLYGON
+\item[st\_delaunayTriangles] — Return a Delaunay triangulation around the given input points.
+\item[st\_difference] — Returns a geometry that represents that part of geometry A that does not intersect with geometry B.
+\item[ST\_Dump] — Returns a set of geometry\_dump (geom,path) rows, that make up a geometry g1.
+\item[ST\_DumpPoints] — Returns a set of geometry\_dump (geom,path) rows of all points that make up a geometry.
+\item[ST\_DumpRings] — Returns a set of geometry\_dump rows, representing the exterior and interior rings of a polygon.
+\end{description}
+\end{frame}
+% --------------------------------------------------- Slide --
+
+\begin{frame}[fragile]
+\frametitle{Geoprocesamiento (III)}
+\begin{description}
+\item[ST\_FlipCoordinates] — Returns a version of the given geometry with X and Y axis flipped. Useful for people who have built latitude/longitude features and need to fix them.
+\item[ST\_Intersection] — (T) Returns a geometry that represents the shared portion of geomA and geomB. The geography implementation does a transform to geometry to do the intersection and then transform back to WGS84.
+\item[ST\_LineToCurve ]— Converts a LINESTRING/POLYGON to a CIRCULARSTRING, CURVED POLYGON
+\item[ST\_MakeValid] — Attempts to make an invalid geometry valid without losing vertices.
+\item[ST\_MemUnion] — Same as ST\_Union, only memory-friendly (uses less memory and more processor time).
+\item[ST\_MinimumBoundingCircle] — Returns the smallest circle polygon that can fully contain a geometry. Default uses 48 segments per quarter circle.
+\item[ST\_Polygonize] — Aggregate. Creates a GeometryCollection containing possible polygons formed from the constituent linework of a set of geometries.
+
+\end{description}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Geoprocesamiento (IV)}
+\begin{description}
+\item[ST\_Node] — Node a set of linestrings.
+\item[ST\_OffsetCurve] — Return an offset line at a given distance and side from an input line. Useful for computing parallel lines about a center line
+\item[ST\_RemoveRepeatedPoints] — Returns a version of the given geometry with duplicated points removed.
+\item[ST\_SharedPaths] — Returns a collection containing paths shared by the two input linestrings/multilinestrings.
+\item[ST\_Shift\_Longitude] — Reads every point/vertex in every component of every feature in a geometry, and if the longitude coordinate is <0, adds 360 to it. The result would be a 0-360 version of the data to be plotted in a 180 centric map
+\item[ST\_Simplify] — Returns a "simplified" version of the given geometry using the Douglas-Peucker algorithm.
+\item[ST\_SimplifyPreserveTopology] — Returns a "simplified" version of the given geometry using the Douglas-Peucker algorithm. Will avoid creating derived geometries (polygons in particular) that are invalid.
+\item[ST\_Split] — Returns a collection of geometries resulting by splitting a geometry.
+\item[ST\_SymDifference] — Returns a geometry that represents the portions of A and B that do not intersect. It is called a symmetric difference because ST\_SymDifference(A,B) = ST\_SymDifference(B,A).
+\item[ST\_Union] — Returns a geometry that represents the point set union of the Geometries.
+\item[ST\_UnaryUnion] — Like ST\_Union, but working at the geometry component level.
+\end{description}
+\end{frame}
+
+
+% --------------------------------------------------- Slide --
 \end{document}
