@@ -1,0 +1,38 @@
+%Requiere setup del package ER-tikz
+\begin{tikzpicture}
+  \path[mindmap,concept color=black!70!white,text=white]
+    node[concept] {estancia}
+    [clockwise from=0]
+    child {
+      node[concept] {\textbf{geom} \textit{geometry}}
+      [clockwise from=30]
+      child { 
+        node[concept] {Multi Polygon} 
+        [clockwise from=-30]
+        child[concept color=green!75!blue] { node[concept] {\textbf{WKB}} }
+      }
+      child { 
+        node[concept] {SRID 25830} 
+        [clockwise from=-75]
+        child[concept color=blue!50!black] { 
+          node[concept] {\textbf{\textbf{spatial \_ref\_sys}}} 
+          [clockwise from=-30]
+          child[concept color=green!75!blue] { node[concept] {\textbf{WKT}} }
+        }
+      }
+      child[concept color=red!80!white] { node[concept] {GIST index} }
+    }  
+    child {
+      node[concept] {\textbf{gid} \textit{serial}}
+      [clockwise from=-30]
+      child[concept color=red!80!white] { node[concept] {BTREE index} }
+    }
+    child [concept color=blue!50!white] {
+      node[concept] {system catalog}
+      [clockwise from=-30]
+      child[concept color=blue!50!black] { node[concept] {\textbf{geometry \_columns}} }    
+    }
+    child { node[concept] {\textbf{codigo} \textit{varchar}} }
+    child { node[concept] {\textbf{coddpto} \textit{varchar}} }
+    child { node[concept] {\textbf{coduso} \textit{varchar}} };
+\end{tikzpicture}
