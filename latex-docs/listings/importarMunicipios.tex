@@ -1,0 +1,10 @@
+\lstset{caption=Importación de municipios,label=bash:importarMunicipios}
+\begin{bash}
+## Trabajamos en nuestro directorio de usuario
+cd
+## Descargamos y extraemos fichero GML en subdirectorio municipios
+wget https://github.com/labgeo/postgis-intro/raw/2015edition/data/gml/municipios/municipios.tar.gz
+mkdir municipios && tar -xvf municipios.tar.gz -C municipios
+## Importamos a PostgreSQL con la utilidad ogr2ogr
+ogr2ogr -f "PostgreSQL" PG:"host=localhost user=user dbname=ua password=user" municipios/municipios.gml -nln public.municipios
+\end{bash}

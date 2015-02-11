@@ -36,10 +36,37 @@
 \end{enumerate}
 \end{frame}
 
+% --------------------------------------------------- Slide --
+\begin{frame}{Introducción a SQL}
+\frametitle{SQL}
+\begin{block}{¿Qué es SQL?}
+El lenguaje de consulta estructurado o SQL (por sus siglas en inglés Structured Query Language) es un lenguaje de acceso a bases de datos relacionales que permite especificar diversos tipos de operaciones en ellas.
+Existen tres grupos de operaciones:
+\begin{enumerate}
+\item DLL - Estructurales - Permiten definir la estructura de la base de datos, tablas, relaciones, índices
+\item DML - Consultas - Permiten generar consultas para operar con la base de datos 
+\item DCL - Permisos - Permiten definir los permisos sobre los datos
+\end{enumerate}
+
+\end{block}
+\end{frame}
+
+
+% --------------------------------------------------- Slide --
+\begin{frame}{Operaciones con SQL}
+\begin{enumerate}
+\item SELECT 
+\item UPDATE
+\item DELETE
+\end{enumerate}
+\end{frame}
+
 
 \section[Consultas SQL]{Ejemplos de consultas complejas con SQL}
 \subsection{Modelo relacional y SQL}
 %%SQL entre otros lenguajes
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame{\frametitle{Diagrama Entidad-Relación (físico)}
@@ -150,6 +177,17 @@ El SQL es un lenguaje estándar de consulta de bases de datos con un gran númer
 \input{listings/ejemplosSelect}
 
 \end{frame}
+
+% --------------------------------------------------- Slide --
+\begin{frame}[fragile]
+\frametitle{Optimización de consultas}
+
+Dependiendo de la forma de ejecución de una determinada consulta 'select' se consigue reducir de manera significativa el tiempo de ejecución de esta consulta
+
+\input{listings/ejemploOptimizacion}
+
+\end{frame}
+
 
 
 \end{document}

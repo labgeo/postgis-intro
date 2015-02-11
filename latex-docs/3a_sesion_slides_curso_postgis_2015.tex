@@ -1,0 +1,106 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SETUP
+\documentclass{classes/beamer_GeomaticaUA}
+%\documentclass[handout]{Classes/beamer_GeomaticaUA}
+\usepackage{styles/beamer_GeomaticaUA}
+%\usepackage{styles/Amsterdam}
+\input{setups/listings_setup}
+\input{setups/tikz_setup}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% METADATA
+\author{José Tomás Navarro}
+\title{Gestión de bases de datos espaciales con PostGIS}
+\titlegraphic{\includegraphics[height=0.6cm]{logos/logo_ua.png} \hspace{1cm} \includegraphics[height=1cm]{logos/iig}} 
+\institute[GeomaticaLab]{Instituto Interuniversitario de Geografía\\Laboratorio de Geomática} 
+\date{12 de marzo de 2015}
+\subject{Tercera sesión del curso ``Diseño, creación y gestión de Bases de Datos Geográficas con PostGIS''}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SLIDES
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\section[Introducción]{¿Qué es PostGIS?}
+\subsection{PostGIS: estándares y arquitectura}
+\begin{frame}{¿Que vamos a hacer hoy?}
+
+\begin{enumerate}
+\item ¿Qué es PostGIS?
+\item El tipo \textit{geometry}
+\item Creación, modificación y transformación de geometrías
+\item Salida a formatos de intercambio
+\end{enumerate}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{¿Qué es PostGIS?}
+\begin{block}{Es la implementación de una especificación pública}
+\begin{itemize}
+\item PostGIS es conforme con la especificación \href{http://www.opengeospatial.org/standards/sfs}{Simple features access-SQL option} del OGC, que es a su vez estándar internacional (\textbf{ISO 19125-2})
+\item Permite almacenar, recuperar, consultar y actualizar de entidades geográficas con geometría vectorial simple mediante SQL
+\item Define \textbf{tipos} SQL de geometría junto con los \textbf{operadores} y las \textbf{funciones} SQL específicos de dichos tipos
+\end{itemize}
+\end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{¿Qué es PostGIS 2?}
+\begin{block}{Es un paquete plenamente integrado en PostgreSQL 9.1+}
+\begin{itemize}
+\item Se instala como \textbf{extensión} (\textit{CREATE EXTENSION})
+\item Utiliza \textbf{modificadores de tipo} (\textit{typmod})
+\item Usa el \textbf{catálogo del sistema} en lugar de uno propio (\textit{geometry\_columns} es una vista)
+\end{itemize}
+\end{block}
+\begin{exampleblock}{¿Qué es \textit{typmod}?}
+\lstinline!VARCHAR(9)! Texto de 9 caracteres de longitud máxima
+\lstinline!GEOMETRY(Point, 25830)! Geometría de tipo punto en proyección UTM, Huso 30, Hemisferio Norte, Datum ETRS89
+\end{exampleblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Un sistema de propósito general}
+\begin{block}{PostGIS proporciona:}
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline 
+Constructores de geometría \color{blue}\checkmark & Inspección de geometría \color{blue}\checkmark  \\ 
+\hline 
+Edición y transformación \color{blue}\checkmark & Exportación \color{blue}\checkmark \\ 
+\hline 
+Mediciones y proyecciones \color{blue}\checkmark & Predicados relacionales \color{blue}\checkmark \\ 
+\hline 
+Geoprocesamiento \color{blue}\checkmark & Funciones de interpolación \color{blue}\checkmark \\ 
+\hline
+\end{tabular}
+\end{center}
+\end{block}
+\begin{exampleblock}{PostGIS 2 en cifras}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline 
+ & \textbf{PostGIS} & \textbf{native geometry} \\ 
+\hline 
+\textbf{Tipos} & 17 & 7 \\ 
+\hline 
+\textbf{Operadores} & 45 & 31 \\ 
+\hline 
+\textbf{Funciones} & 1049 & 31 \\ 
+\hline 
+\textbf{Agregados} & 15 & 0 \\ 
+\hline
+\end{tabular}
+\end{center}
+\end{exampleblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{¿Cómo se almacena y gestiona el dato geográfico?}
+\begin{center}
+\resizebox{1.15\textheight}{!}{\input{tikzs/mindmap_geodata_storage}}
+\end{center}
+\end{frame}
+
+\end{document}

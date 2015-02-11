@@ -1,11 +1,10 @@
 \lstset{caption=Importación de estancias,label=bash:importarEstancias}
 \begin{bash}
-## Trabajamos en nuestro directorio /home
+## Trabajamos en nuestro directorio de usuario
 cd
-## Descargamos archivo comrpimido con fichero shape de SIGUA
-wget https://github.com/labgeo/postgis-intro/raw/2015edition/data/shapefiles/siguapb/siguapb.tar.lz
-## Extraemos fichero shape en subdirectorio siguapb
-mkdir siguapb; tar --lzip -xvf siguapb.tar.lz -C siguapb
-## Importamos a PostgreSQL con la utilidad shp2pgsql
-sudo shp2pgsql -s 25830 siguapb/siguapb.shp public.estancias  | psql -h localhost -d ua -U user
+## Descargamos y extraemos fichero shape en subdirectorio siguapb
+wget https://github.com/labgeo/postgis-intro/raw/2015edition/data/shapefiles/siguapb/siguapb.tar.gz
+mkdir siguapb && tar -xvf siguapb.tar.gz -C siguapb
+## Importamos en la base de datos ua
+shp2pgsql -s 25830 siguapb/siguapb.shp public.estancias  | psql -h localhost -d ua -U user
 \end{bash}

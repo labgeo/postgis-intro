@@ -2,6 +2,11 @@
 \renewcommand{\lstlistlistingname}{Codes}
 \renewcommand{\lstlistingname}{Code}
 
+% default style useful for inline code blocks
+\lstset{
+ basicstyle=\ttfamily\color[rgb]{0.0,0.5,0.0},
+ breaklines=true
+}{}
 
 %% LISTING ENVIRONMENTS-----------------------
 % Java/c#
@@ -34,7 +39,7 @@ language=Java,                % choose the language of the code
 language=SQL,                % choose the language of the code
  frame=Ltbr,
  framerule=0.2pt,
- aboveskip=0.5cm,
+ aboveskip=0.25cm,
  framextopmargin=3pt,
  framexbottommargin=3pt,
  framexleftmargin=0.4cm,
@@ -51,7 +56,9 @@ language=SQL,                % choose the language of the code
  return,returns,cost,row,volatile,into, setof, double, precision,declare,record,reverse,boolean},
  numbers=left,
  numbersep=14pt,
- breaklines=true
+ breaklines=true,
+ extendedchars=true,
+ literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1 {¿}{{?`}}1
 }}{}
 
 
@@ -60,7 +67,7 @@ language=SQL,                % choose the language of the code
 language=bash,                % choose the language of the code
  frame=Ltbr,
  framerule=0.2pt,
- aboveskip=0.5cm,
+ aboveskip=0.25cm,
  framextopmargin=3pt,
  framexbottommargin=3pt,
  framexleftmargin=0.4cm,
@@ -73,9 +80,12 @@ language=bash,                % choose the language of the code
  basicstyle=\tiny\ttfamily,
  commentstyle=\color[rgb]{0.133,0.545,0.133},
  keywordstyle=\color[rgb]{0,0,1},%\bfseries
+ morekeywords={cd,mkdir}
  numbers=left,
  numbersep=14pt,
- breaklines=true
+ breaklines=true,
+ extendedchars=true,
+ literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1 {¿}{{?`}}1
 }}{}
 
 
