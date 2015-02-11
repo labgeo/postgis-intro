@@ -4,7 +4,7 @@
 
 
 %%Packages SIEMPRE útiles
-\usepackage[utf8x]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage[english,spanish]{babel}
 \usepackage{graphics}
 \usepackage{amsmath}
