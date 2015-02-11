@@ -1,0 +1,5 @@
+\lstset{caption=Ejemplo de COPY,label=sql:copy}
+\begin{SQL}
+COPY departamentos FROM '/home/user/Departamentos.csv' WITH DELIMITER ';' csv header;
+-- Ahora importa el resto de ficheros a la base de datos.
+\end{SQL}
