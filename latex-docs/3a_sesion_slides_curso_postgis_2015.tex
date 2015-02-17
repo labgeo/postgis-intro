@@ -24,7 +24,7 @@
 
 \section[Introducción]{¿Qué es PostGIS?}
 \subsection{PostGIS: estándares y arquitectura}
-\begin{frame}{¿Que vamos a hacer hoy?}
+\begin{frame}{¿Qué vamos a hacer hoy?}
 
 \begin{enumerate}
 \item ¿Qué es PostGIS?
@@ -58,6 +58,14 @@
 \lstinline!VARCHAR(9)! Texto de 9 caracteres de longitud máxima
 \lstinline!GEOMETRY(Point, 25830)! Geometría de tipo punto en proyección UTM, Huso 30, Hemisferio Norte, Datum ETRS89
 \end{exampleblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{¿Con qué está construído PostGIS 2?}
+\begin{block}{Un núcleo basado en software libre}
+PostGIS 2 es un interfaz SQL a las librerías GEOS (análisis espacial y geoprocesamiento) y PROJ.4 (transformación entre sistemas de referencia espacial)
+\end{block}
+\input{listings/postgisVersion}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -112,5 +120,6 @@ Geoprocesamiento \color{blue}\checkmark & Funciones de interpolación \color{blu
 {\input{tikzs/uml_iso19125}}
 \end{center}
 \end{frame}
+
 
 \end{document}
