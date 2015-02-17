@@ -1,0 +1,16 @@
+%Requiere setup del package tikz-uml
+\begin{tikzpicture}
+\umlsimpleclass[type=abstract]{Geometry} 
+\umlsimpleclass[x=6]{SpatialReferenceSystem} 
+\umlsimpleclass[x=-2,y=-4.5]{Point} 
+\umlsimpleclass[x=2.5,y=-2]{LineString} 
+\umlsimpleclass[x=6,y=-2]{Polygon} 
+\umlsimpleclass[x=2.5,y=-4.5]{LinearRing} 
+\umluniassoc{Geometry}{SpatialReferenceSystem}
+\umlinherit[geometry=|-|,weight=0.778]{Point}{Geometry}
+\umlinherit[geometry=|-|,weight=0.5]{LineString}{Geometry}
+\umlinherit[geometry=|-|,weight=0.5]{Polygon}{Geometry}
+\umlaggreg[attr2=+vertex|2..*]{LineString}{Point}
+\umlinherit{LinearRing}{LineString}
+\umlaggreg[attr2=+ring|1..*]{Polygon}{LinearRing}
+\end{tikzpicture}

@@ -107,19 +107,10 @@ Geoprocesamiento \color{blue}\checkmark & Funciones de interpolación \color{blu
 \section[Geometría]{El tipo geometry}
 \subsection{PostGIS: la geometría de los datos geográficos}
 
-\begin{frame}{El tipo de datos ``geometry''}
-\begin{block}{Representación de geometrías según ISO 19125-2}
-\begin{tikzpicture}
-\umlsimpleclass[type=abstract]{Geometry} 
-\umlsimpleclass[y=-2]{Point} 
-\umlsimpleclass[x=2.5,y=-2]{LineString} 
-\umlsimpleclass[x=5,y=-2]{Polygon} 
-\umlinherit{Point}{Geometry}
-\umlinherit{LineString}{Geometry}
-\umlinherit{Polygon}{Geometry}
-
-\end{tikzpicture}
-\end{block}
+\begin{frame}{Tipos de datos espaciales ISO 19125}
+\begin{center}
+{\input{tikzs/uml_iso19125}}
+\end{center}
 \end{frame}
 
 \end{document}
